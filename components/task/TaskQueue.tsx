@@ -7,10 +7,27 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { useMobileGestures, useIsMobile } from '@/lib/hooks/useMobileGestures';
 
 export function TaskQueue() {
   const { tasks } = useAgentStore();
   const [showCompleted, setShowCompleted] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Mobile gesture for completed tasks toggle
+  const completedGestureRef = useMobileGestures({
+    onSwipeUp: () => {
+      if (isMobile && completedTasks.length > 0) {
+        setShowCompleted(true);
+      }
+    },
+    onSwipeDown: () => {
+      if (isMobile && showCompleted) {
+        setShowCompleted(false);
+      }
+    },
+    threshold: 50
+  });
 
   const pendingTasks = tasks.filter(t => t.status === 'pending' || t.status === 'running');
   const completedTasks = tasks.filter(t => t.status === 'completed');
@@ -78,10 +95,12 @@ export function TaskQueue() {
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent>
+            <div ref={completedGestureRef as React.RefObject<HTMLDivElement>}>
             <div className="space-y-2">
               {completedTasks.map(task => (
                 <TaskCard key={task.id} task={task} />
               ))}
+            </div>
             </div>
           </CollapsibleContent>
         </Collapsible>
