@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useAgentStore } from '@/lib/stores/agentStore';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { LogEntry as LogEntryType } from '@/lib/types';
 import { LogEntry } from './LogEntry';
 import { AnimatePresence } from 'framer-motion';
 
@@ -33,7 +34,7 @@ export function ExecutionLog() {
                 <p className="text-sm">No logs yet. Start the agent to see execution details.</p>
               </div>
             ) : (
-              executionLog.map((entry) => (
+              executionLog.map((entry: LogEntryType) => (
                 <LogEntry key={entry.id} entry={entry} />
               ))
             )}

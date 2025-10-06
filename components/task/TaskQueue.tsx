@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useAgentStore } from '@/lib/stores/agentStore';
 import { TaskCard } from './TaskCard';
+import type { Task } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
@@ -29,9 +30,9 @@ export function TaskQueue() {
     threshold: 50
   });
 
-  const pendingTasks = tasks.filter(t => t.status === 'pending' || t.status === 'running');
-  const completedTasks = tasks.filter(t => t.status === 'completed');
-  const failedTasks = tasks.filter(t => t.status === 'failed');
+  const pendingTasks = tasks.filter((t: Task) => t.status === 'pending' || t.status === 'running');
+  const completedTasks = tasks.filter((t: Task) => t.status === 'completed');
+  const failedTasks = tasks.filter((t: Task) => t.status === 'failed');
 
   return (
     <div className="p-4 space-y-4">
@@ -56,7 +57,7 @@ export function TaskQueue() {
             initial="hidden"
             animate="visible"
           >
-            {pendingTasks.map(task => (
+            {pendingTasks.map((task: Task) => (
               <TaskCard key={task.id} task={task} />
             ))}
           </motion.div>
@@ -73,7 +74,7 @@ export function TaskQueue() {
             </Badge>
           </div>
           <div className="space-y-2">
-            {failedTasks.map(task => (
+            {failedTasks.map((task: Task) => (
               <TaskCard key={task.id} task={task} />
             ))}
           </div>
@@ -97,7 +98,7 @@ export function TaskQueue() {
           <CollapsibleContent>
             <div ref={completedGestureRef as React.RefObject<HTMLDivElement>}>
             <div className="space-y-2">
-              {completedTasks.map(task => (
+              {completedTasks.map((task: Task) => (
                 <TaskCard key={task.id} task={task} />
               ))}
             </div>

@@ -68,7 +68,7 @@ export function TaskCard({ task }: TaskCardProps) {
             >
               Priority: {task.priority}
             </Badge>
-            {task.priority >= 8 && (
+            {typeof task.priority === 'number' && task.priority >= 8 && (
               <Zap className="w-3 h-3 text-amber-400" />
             )}
           </div>

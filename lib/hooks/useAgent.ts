@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAgentStore } from '../stores/agentStore';
+import type { Task, LogEntry } from '../types';
 import { generateInitialTasks, generateFollowUpTasks, prioritizeTasks } from '../services/taskGenerator';
 import { executeTaskWithAI, simulateTaskExecution } from '../services/apiService';
 
@@ -15,7 +16,7 @@ export function useAgent() {
   }, []);
 
   const executeAgentIteration = useCallback(async () => {
-    const pendingTasks = store.tasks.filter(t => t.status === 'pending');
+    const pendingTasks = store.tasks.filter((t: Task) => t.status === 'pending');
     
     if (pendingTasks.length === 0 || store.currentIteration >= store.maxIterations) {
       store.stopAgent();
@@ -101,7 +102,7 @@ export function useAgent() {
       }
 
       // Add milestone logs
-      const completedCount = store.tasks.filter(t => t.status === 'completed').length;
+      const completedCount = store.tasks.filter((t: Task) => t.status === 'completed').length;
       const totalCount = store.tasks.length;
       const progress = (completedCount / totalCount) * 100;
 
@@ -160,7 +161,7 @@ export function useAgent() {
 
     // Clear any previous error messages about objectives
     const hasObjectiveError = store.executionLog.some(
-      log => log.message === 'Please enter an objective first' && log.type === 'error'
+      (log: LogEntry) => log.message === 'Please enter an objective first' && log.type === 'error'
     );
     if (hasObjectiveError) {
       store.addLog({

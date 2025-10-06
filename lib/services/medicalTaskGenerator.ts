@@ -2,7 +2,7 @@ import { Task } from '../types';
 import { MedicalSpecialty, ResearchStudyType, MedicalResearchTemplate, MedicalTaskTemplate } from '../types/medical';
 
 // Medical specialty templates for task generation
-export const MEDICAL_TASK_TEMPLATES: Record<MedicalSpecialty, MedicalTaskTemplate> = {
+export const MEDICAL_TASK_TEMPLATES: Partial<Record<MedicalSpecialty, MedicalTaskTemplate>> = {
   cardiology: {
     category: 'clinical',
     specialty: 'cardiology',
@@ -96,7 +96,7 @@ export const MEDICAL_TASK_TEMPLATES: Record<MedicalSpecialty, MedicalTaskTemplat
 };
 
 // Research study templates
-export const RESEARCH_STUDY_TEMPLATES: Record<ResearchStudyType, MedicalResearchTemplate> = {
+export const RESEARCH_STUDY_TEMPLATES: Partial<Record<ResearchStudyType, MedicalResearchTemplate>> = {
   systematic_review: {
     id: 'systematic_review_template',
     name: 'Systematic Review Protocol',
