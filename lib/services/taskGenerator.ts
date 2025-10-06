@@ -27,6 +27,18 @@ const taskTemplates = {
   ],
 };
 
+function getPriorityValue(priority: number | string): number {
+  if (typeof priority === 'string') {
+    switch (priority) {
+      case 'high': return 10;
+      case 'medium': return 5;
+      case 'low': return 1;
+      default: return 5;
+    }
+  }
+  return priority;
+}
+
 export function generateInitialTasks(objective: string): Task[] {
   const tasks: Task[] = [];
   const keywords = extractKeywords(objective);
@@ -71,7 +83,8 @@ export function generateFollowUpTasks(completedTask: Task, result: string, objec
       
       // Consider objective context for priority adjustment
       const priorityAdjustment = objective.toLowerCase().includes('urgent') ? 1 : 0;
-      tasks.push(createTask(description, completedTask.priority - 1 + priorityAdjustment, [completedTask.id]));
+      const newPriority = getPriorityValue(completedTask.priority) - 1 + priorityAdjustment;
+      tasks.push(createTask(description, newPriority, [completedTask.id]));
     }
   }
 
@@ -129,19 +142,7 @@ export function prioritizeTasks(tasks: Task[]): Task[] {
     if (a.status === 'running' && b.status !== 'running') return -1;
     if (a.status !== 'running' && b.status === 'running') return 1;
     
-    // Sort by priority - handle both string and number priorities
-    const getPriorityValue = (priority: number | string): number => {
-      if (typeof priority === 'string') {
-        switch (priority) {
-          case 'high': return 10;
-          case 'medium': return 5;
-          case 'low': return 1;
-          default: return 5;
-        }
-      }
-      return priority;
-    };
-    
+    // Sort by priority
     return getPriorityValue(b.priority) - getPriorityValue(a.priority);
   });
 }

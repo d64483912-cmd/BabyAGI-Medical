@@ -46,7 +46,7 @@ interface AgentStore extends AgentState {
 
 export const useAgentStore = create<AgentStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       objective: '',
       tasks: [],
       executionLog: [],
@@ -148,7 +148,7 @@ export const useAgentStore = create<AgentStore>()(
       },
 
       exportMedicalReport: (format, specialty) => {
-        const state = useAgentStore.getState();
+        const state = get();
         switch (format) {
           case 'markdown':
             return MedicalExporter.exportToMarkdown(

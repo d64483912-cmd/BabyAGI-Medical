@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAgentStore } from '@/lib/stores/agentStore';
+import type { Settings } from '@/lib/types';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +27,7 @@ interface SettingsModalProps {
 export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const { settings, updateSettings, mode, setMode } = useAgentStore();
   const [showApiKey, setShowApiKey] = useState(false);
-  const [localSettings, setLocalSettings] = useState(settings);
+  const [localSettings, setLocalSettings] = useState<Settings>(settings);
 
   const handleSave = () => {
     updateSettings(localSettings);

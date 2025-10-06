@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Label } from '@/components/ui/label';
 import { useAgentStore } from '@/lib/stores/agentStore';
 import { MedicalSpecialty, ResearchStudyType } from '@/lib/types/medical';
+import type { Task } from '@/lib/types';
 import { Download, FileText, Database, FileDown, Stethoscope, FlaskConical } from 'lucide-react';
 
 const MEDICAL_SPECIALTIES: Record<MedicalSpecialty, string> = {
@@ -85,9 +86,9 @@ export function MedicalPanel() {
     URL.revokeObjectURL(url);
   };
 
-  const completedTasks = tasks.filter(t => t.status === 'completed').length;
+  const completedTasks = tasks.filter((t: Task) => t.status === 'completed').length;
   const totalTasks = tasks.length;
-  const medicalTasks = tasks.filter(t => t.specialty || t.studyType).length;
+  const medicalTasks = tasks.filter((t: Task) => t.specialty || t.studyType).length;
 
   return (
     <Card className="w-full">
