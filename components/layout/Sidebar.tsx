@@ -11,10 +11,28 @@ import { useAgent } from '@/lib/hooks/useAgent';
 import { Play, Pause, RotateCcw, Download, ChevronRight, ChevronLeft } from 'lucide-react';
 import { MedicalPanel } from '../medical/MedicalPanel';
 
+import { useMobileGestures, useIsMobile } from '@/lib/hooks/useMobileGestures';
+
 export function Sidebar() {
   const { objective, setObjective, isRunning, isPaused, sidebarCollapsed, toggleSidebar } = useAgentStore();
   const { startAgent, pauseAgent, resetAgent } = useAgent();
   const [localObjective, setLocalObjective] = useState(objective);
+  const isMobile = useIsMobile();
+  
+  // Mobile gesture support for sidebar
+  const sidebarGestureRef = useMobileGestures({
+    onSwipeLeft: () => {
+      if (!sidebarCollapsed && isMobile) {
+        toggleSidebar();
+      }
+    },
+    onSwipeRight: () => {
+      if (sidebarCollapsed && isMobile) {
+        toggleSidebar();
+      }
+    },
+    threshold: 80
+  });
 
   const handleStart = () => {
     setObjective(localObjective);
@@ -44,10 +62,18 @@ export function Sidebar() {
     <>
       <motion.aside
         initial={false}
-        animate={{ width: sidebarCollapsed ? 0 : 320 }}
-        className="fixed left-0 top-0 h-screen bg-slate-900 border-r border-slate-800 overflow-hidden z-40"
+        animate={{ 
+          width: sidebarCollapsed ? 0 : 320,
+          x: sidebarCollapsed ? -320 : 0
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed left-0 top-0 h-screen bg-slate-900 border-r border-slate-800 overflow-hidden z-40 md:relative md:translate-x-0"
+        style={{
+          paddingTop: 'env(safe-area-inset-top)',
+          paddingBottom: 'env(safe-area-inset-bottom)'
+        }}
       >
-        <div className="w-[320px] h-full flex flex-col">
+        <div className="w-[320px] h-full flex flex-col touch-pan-y" ref={sidebarGestureRef as React.RefObject<HTMLDivElement>}>
           {/* Header */}
           <div className="p-6 border-b border-slate-800">
             <div className="flex items-center gap-3 mb-4">
@@ -84,11 +110,13 @@ export function Sidebar() {
           </div>
 
           {/* Medical Panel and Task Queue - Combined Scrollable Area */}
-          <ScrollArea className="flex-1 max-h-[calc(100vh-280px)]">
-            <div className="p-4 border-b border-slate-800">
+          <ScrollArea className="flex-1 max-h-[calc(100vh-280px)] overscroll-contain">
+            <div className="p-4 border-b border-slate-800 touch-manipulation">
               <MedicalPanel />
             </div>
-            <TaskQueue />
+            <div className="touch-manipulation">
+              <TaskQueue />
+            </div>
           </ScrollArea>
 
           {/* Controls */}
@@ -133,12 +161,27 @@ export function Sidebar() {
         </div>
       </motion.aside>
 
+      {/* Mobile Overlay */}
+      {!sidebarCollapsed && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+      
       {/* Toggle Button */}
       <Button
         onClick={toggleSidebar}
         variant="ghost"
         size="icon"
-        className="fixed left-2 top-2 z-50 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700"
+        className="fixed left-2 top-2 z-50 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 touch-manipulation"
+        style={{
+          top: 'max(env(safe-area-inset-top), 8px)',
+          left: '8px'
+        }}
       >
         {sidebarCollapsed ? (
           <ChevronRight className="w-4 h-4 text-slate-300" />

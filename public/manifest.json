@@ -1,13 +1,25 @@
 {
-  "name": "BabyAGI PWA",
-  "short_name": "BabyAGI",
-  "description": "Autonomous AI agent for task execution and goal achievement",
-  "start_url": "/",
+  "name": "Baby-AGI Medical Research Assistant",
+  "short_name": "AGI Medical",
+  "description": "AI-powered medical research assistant with autonomous task generation, evidence-based analysis, and professional clinical reporting",
+  "start_url": "/?source=pwa",
+  "id": "babyagi-medical",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#0f172a",
-  "theme_color": "#3b82f6",
-  "orientation": "any",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "lang": "en-US",
+  "dir": "ltr",
   "icons": [
+    {
+      "src": "/medical-icon.svg",
+      "sizes": "72x72 96x96 128x128 144x144 152x152 192x192 256x256 384x384 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/icon-192.svg",
       "sizes": "192x192",
@@ -21,5 +33,56 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "utilities"]
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "375x812",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile view of medical research interface"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop view with medical research panel"
+    }
+  ],
+  "categories": ["medical", "productivity", "education", "health", "research"],
+  "iarc_rating_id": "e84b072d-71b4-4028-86e1-c3a6aecbde3e",
+  "shortcuts": [
+    {
+      "name": "Start Medical Research",
+      "short_name": "Research",
+      "description": "Begin new medical research session",
+      "url": "/?action=start-research",
+      "icons": [
+        {
+          "src": "/medical-icon.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "View Research History",
+      "short_name": "History",
+      "description": "Access previous research sessions",
+      "url": "/?action=history",
+      "icons": [
+        {
+          "src": "/medical-icon.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }
